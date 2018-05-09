@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+    <canvas width="600" height="600"></canvas>
+    <style>
+    div{
+        margin-left: 200px;
+        margin-top: 200px;
+    }
+    canvas{
+        margin-left: 200px;
+        margin-top: 200px;
+        margin-bottom: 200px;
+        /*width: 300px;
+        height:300px;*/
+        border:1px solid #000;
+    }
+    </style>
+<script id="ver" type="x-shader/x-vertex">#version 300 es
+// ↑ 一行目に必ず書きます。
+// OpenGL ES 3.0（WebGL2）の機能を使うことを明示しています。
+
+// JavaScriptから入力される値を、inで宣言します。
+// 今回は「頂点座標」と「頂点色」のふたつを用います。
+// 頂点座標：x,y,zの3要素のベクトル
+// 頂点色：r,g,b,alphaの4要素のベクトル
+in vec3 pos;
+in vec4 cl;
+
+// このシェーダからフラグメントシェーダに対して出力する変数を
+// outで宣言します。
+out vec4 vColor;
+
+void main() {
+  // 頂点色を何も処理せずにそのままフラグメントシェーダへ出力します。
+  vColor = cl;
+
+  // 頂点座標を決定するには、gl_Position変数へ書き込みます。
+  // 今回は特別な処理は行わず、受け取った値をそのまま素直に出力しています。
+  // 頂点座標はx,y,z,wの4つになるので、vec3からvec4へと変換しています。
+  // wの値については後ほど説明しますが、ここでは1.0固定にしておいてください。
+  gl_Position = vec4(pos, 1.0);
+}
+</script>
+
+<script id="frag" type="x-shader/x-fragment">#version 300 es
+// float（単制度浮動小数点）の精度を指定します。
+// これは必須です。
+// lowp, midiump, highpなどありますが、
+// 特別な理由がない限りhighpでいいでしょう。
+precision highp float;
+
+// バーテックスシェーダから受け取る変数を
+// inで宣言します。
+in vec4 vColor;
+
+// 画面に出力する色の変数を宣言しておく。
+// r,g,b,alphaのvec4。
+out vec4 fragmentColor;
+
+void main() {
+  // 特に何も処理せずそのまま色を出力する。
+  fragmentColor = vColor;
+}
+</script>
+    <script src="./index.js"></script>
+</body>
+</html>
